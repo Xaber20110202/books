@@ -69,6 +69,43 @@ npm install -g express-generator 脚手架
     另外，app.enabled(setting)、app.disabled(setting) 其实就是 app.get(setting) === true 的语法糖
 
 8.3 渲染视图
+    res.render('模版路径', '模版数据');
+
+    视图系统配置
+        
+        改变查找目录
+            app.set('views', __dirname + '/views'); // 指定了Express在查找视图时所用的目录。
+
+            __dirname 当前运行的文件所在目录
+
+        默认的模版引擎
+            app.set('view engine', 'jade'); // 默认用jade 模版
+
+            但是考虑到多模版共用情况，express 会根据模版文件后缀，匹配使用的模版
+
+            res.render('index', {}); // 不写后缀，默认使用 jade 模版
+            res.render('feed.ejs', {}); // 使用ejs 模版
+
+        视图缓存
+            view cache 在生产环境下是默认开启的，这样的好处是，不需要每次请求都从硬盘上读取模版。
+            带来一个缺点就是，模版的改动只有在程序重启才生效
+
+            相当于就是把模版的字符串放到内存里面去了
+
+    视图查找
+        类似 require
+            按照 view engine 路径，相对查找
+            如果是文件夹路径，找 index.ejs（扩展名根据具体情况）
+            扩展名就用默认的，除非有其他指定
+
+    把数据输出到视图中
+        res.render('模版路径', '模版数据'); // 没啥好说的
+
+        但是，辅助函数需要描述下，还挺有用
+
+        app.locals() // 传递程序层面的变量
+
+        res.locals() // 传递请求层面的本地变量
 
 8.4 处理表单和文件上传
 
