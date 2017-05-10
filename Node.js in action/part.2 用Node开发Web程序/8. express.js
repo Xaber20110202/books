@@ -103,13 +103,50 @@ npm install -g express-generator 脚手架
 
         但是，辅助函数需要描述下，还挺有用
 
-        app.locals() // 传递程序层面的变量
-
         res.locals() // 传递请求层面的本地变量
 
+        app.locals() // 传递程序层面的变量
+
+        在视图中查找变量的顺序是这样的：
+            render 中是否传递了数据／变量
+
+            再看 res.locals() 是否传递了数据／变量
+
+            最后看 app.locals() 是否传递了数据／变量
+
+        视图层默认可以获取 settings 变量，可以拿到所有 app.set() 设定的值
+
+        在 express 中是这样做的：app.locals.settings = app.settings
+
+        此外，app.locals 也是一个函数，也可以进行对象方法的传递，用于视图模版函数处理
+
+        app.locals(require('./helpers'));
+
 8.4 处理表单和文件上传
+    通过bodyParser() 解析
+        文件上传实际上通过multipart() 中间件进行了处理
+
+        文件通过 req.files.photo.image 获取
+
+        参数通过 req.body.photo.name 获取
 
 8.5 创建资源下载
+    传输文件  res.sendfile()
+        用了 express.static() 一样的代码，也有HTTP缓存、范围请求等功能，参数选项和其一致，例如
+            {
+                maxAge: oneYear
+            }
+
+            其实类似于静态文件的展示，浏览器会负责这个文件内容展现（例如图片）
+
+    触发浏览器下载 res.download()
+
+        会改变浏览器收到文件后的行为，响应头域ContentDisposition 会被设定为文件的名称，浏览器也会相应地提示用户下载
+
+        设定下载名 可以通过第二个参数进行定义
+            例如： res.download(path, 'name.jpeg');
+
+
 
 
 
